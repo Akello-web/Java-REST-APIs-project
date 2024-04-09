@@ -3,6 +3,7 @@ package kz.aqyl.bookrest.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.aqyl.bookrest.TestData;
 import kz.aqyl.bookrest.domain.Book;
+import kz.aqyl.bookrest.services.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class BookControllerIT {
   @Autowired
   private MockMvc mockMvc;
 
+  @Autowired
+  private BookService bookService;
+
   @Test
   public void testThatBookIsCreated() throws Exception{
     final Book book = TestData.testBook();
@@ -37,4 +41,20 @@ public class BookControllerIT {
             .andExpect(MockMvcResultMatchers.jsonPath("$.author").value(book.getAuthor()));
   }
 
+  @Test
+  public void testThatRetrieveReturns404WhenNoBook() throws Exception{
+    mockMvc.perform(MockMvcRequestBuilders.get("/bookrest/123123123"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
+  public void testThatRetrieveReturns200WhenExists() throws Exception{
+    final Book book = TestData.testBook();
+    bookService.create(book);
+    mockMvc.perform(MockMvcRequestBuilders.get("/bookrest/" + book.getIsbn()))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.isbn").value(book.getIsbn()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(book.getTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.author").value(book.getAuthor()));
+  }
 }

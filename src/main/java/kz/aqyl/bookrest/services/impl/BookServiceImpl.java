@@ -7,6 +7,8 @@ import kz.aqyl.bookrest.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -22,6 +24,12 @@ public class BookServiceImpl implements BookService {
     final BookEntity bookEntity = bookToBookEntity(book);
     final BookEntity savedBookEntity = bookRepository.save(bookEntity);
     return bookEntityToBook(savedBookEntity);
+  }
+
+  @Override
+  public Optional<Book> findById(String isbn) {
+    final Optional<BookEntity> foundBook = bookRepository.findById(isbn);
+    return foundBook.map(book -> bookEntityToBook(book));
   }
 
   private BookEntity bookToBookEntity(Book book){
