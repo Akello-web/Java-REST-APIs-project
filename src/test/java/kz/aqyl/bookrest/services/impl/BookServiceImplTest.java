@@ -18,7 +18,7 @@ import static kz.aqyl.bookrest.TestData.testBook;
 import static kz.aqyl.bookrest.TestData.testBookEntity;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceImplTest {
@@ -88,4 +88,10 @@ public class BookServiceImplTest {
     Assertions.assertTrue(result);
   }
 
+  @Test
+  public void testDeleteBookDeletesBook(){
+    final String isbn = "123123123";
+    underTest.deleteBookById(isbn);
+    verify(bookRepository, times(1)).deleteById(eq(isbn));
+  }
 }

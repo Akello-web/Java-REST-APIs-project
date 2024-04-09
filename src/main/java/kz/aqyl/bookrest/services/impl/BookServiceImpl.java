@@ -46,6 +46,11 @@ public class BookServiceImpl implements BookService {
             .collect(Collectors.toList());//last operation converts stream into a list
   }
 
+  @Override
+  public void deleteBookById(String isbn) {
+    bookRepository.deleteById(isbn);
+  }
+
   private BookEntity bookToBookEntity(Book book){
     return BookEntity.builder()
             .isbn(book.getIsbn())
