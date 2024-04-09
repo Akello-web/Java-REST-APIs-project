@@ -1,6 +1,5 @@
 package kz.aqyl.bookrest.services.impl;
 
-import kz.aqyl.bookrest.TestData;
 import kz.aqyl.bookrest.domain.Book;
 import kz.aqyl.bookrest.domain.BookEntity;
 import kz.aqyl.bookrest.repositories.Bookrepository;
@@ -17,6 +16,7 @@ import java.util.Optional;
 
 import static kz.aqyl.bookrest.TestData.testBook;
 import static kz.aqyl.bookrest.TestData.testBookEntity;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +37,7 @@ public class BookServiceImplTest {
 
     when(bookRepository.save(eq(bookEntity))).thenReturn(bookEntity);
 
-    final Book result = underTest.create(book);
+    final Book result = underTest.save(book);
     Assertions.assertEquals(book, result);
 
   }
@@ -74,5 +74,18 @@ public class BookServiceImplTest {
     Assertions.assertEquals(1, result.size());
   }
 
+  @Test
+  public void testIsBookExistsReturnsFalseWhenNoBook(){
+    when(bookRepository.existsById(any())).thenReturn(false);
+    final boolean result = underTest.isBookExists(testBook());
+    Assertions.assertFalse(result);
+  }
+
+  @Test
+  public void testIsBookExistsReturnsTrueWhenBookExists(){
+    when(bookRepository.existsById(any())).thenReturn(true);
+    final boolean result = underTest.isBookExists(testBook());
+    Assertions.assertTrue(result);
+  }
 
 }
