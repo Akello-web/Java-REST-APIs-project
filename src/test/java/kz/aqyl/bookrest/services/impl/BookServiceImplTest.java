@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static kz.aqyl.bookrest.TestData.testBook;
@@ -56,4 +58,21 @@ public class BookServiceImplTest {
     final Optional<Book> result = underTest.findById(book.getIsbn());
     Assertions.assertEquals(Optional.of(book), result);
   }
+
+  @Test
+  public void testListBooksReturnsEmptyWhenNoBook(){
+    when(bookRepository.findAll()).thenReturn(new ArrayList<BookEntity>());
+    final List<Book> result = underTest.listBooks();
+    Assertions.assertEquals(0, result.size());
+  }
+
+  @Test
+  public void testListBooksReturnBookListWhenExists(){
+    final BookEntity bookEntity = testBookEntity();
+    when(bookRepository.findAll()).thenReturn(List.of(bookEntity));
+    final List<Book> result = underTest.listBooks();
+    Assertions.assertEquals(1, result.size());
+  }
+
+
 }

@@ -1,7 +1,6 @@
 package kz.aqyl.bookrest.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kz.aqyl.bookrest.TestData;
 import kz.aqyl.bookrest.domain.Book;
 import kz.aqyl.bookrest.services.BookService;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
+import static kz.aqyl.bookrest.TestData.testBook;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
@@ -28,7 +31,7 @@ public class BookControllerIT {
 
   @Test
   public void testThatBookIsCreated() throws Exception{
-    final Book book = TestData.testBook();
+    final Book book = testBook();
     final ObjectMapper objectMapper = new ObjectMapper();
     final String bookJson = objectMapper.writeValueAsString(book);
 
@@ -49,12 +52,32 @@ public class BookControllerIT {
 
   @Test
   public void testThatRetrieveReturns200WhenExists() throws Exception{
-    final Book book = TestData.testBook();
+    final Book book = testBook();
     bookService.create(book);
     mockMvc.perform(MockMvcRequestBuilders.get("/bookrest/" + book.getIsbn()))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.isbn").value(book.getIsbn()))
             .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(book.getTitle()))
             .andExpect(MockMvcResultMatchers.jsonPath("$.author").value(book.getAuthor()));
+  }
+
+  @Test
+  public void testThatListBooksReturns200EmptyWhenNoBooks() throws Exception{
+    mockMvc.perform(MockMvcRequestBuilders.get("/books"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().string("[]"));
+  }
+
+  @Test
+  public void testThatListBooksReturns200BooksWhenExists() throws Exception{
+    final Book book = testBook();
+    bookService.create(book);
+
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/books"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.[0].isbn").value(book.getIsbn()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.[0].title").value(book.getTitle()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.[0].author").value(book.getAuthor()));
   }
 }
