@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static kz.aqyl.bookrest.TestData.testBook;
+import static kz.aqyl.bookrest.TestData.testBookEntity;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -24,17 +26,9 @@ public class BookServiceImplTest {
 
   @Test
   public void testThatBookIsSaved(){
-    final Book book = Book.builder()
-            .isbn("0123456")
-            .author("SomeGenuis")
-            .title("How to be a Genuis")
-            .build();
+    final Book book = testBook();
 
-    final BookEntity bookEntity = BookEntity.builder()
-            .isbn("0123456")
-            .author("SomeGenuis")
-            .title("How to be a Genuis")
-            .build();
+    final BookEntity bookEntity = testBookEntity();
 
     when(bookRepository.save(eq(bookEntity))).thenReturn(bookEntity);
 
