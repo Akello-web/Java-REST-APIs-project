@@ -3,5 +3,7 @@
 Stack: Java, Spring Boot, Spring Data JPA, Spring Web, H2Database, Docker. 
 
 Covered by: Junit, Mockito, Integration Tests
+
 IDE: Intelij
+
 Build automation tool: Maven
