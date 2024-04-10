@@ -7,3 +7,7 @@ Covered by: Junit, Mockito, Integration Tests
 IDE: Intelij
 
 Build automation tool: Maven
+
+### Run the App
+**From the Command Line**
+> ./mvnw spring-boot:run
