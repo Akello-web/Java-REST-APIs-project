@@ -1,12 +1,12 @@
 ### This is my demo project Built on REST API. 
 
-Stack: Java, Spring Boot, Spring Data JPA, Spring Web, H2Database, Docker. 
+**Stack**: Java, Spring Boot, Spring Data JPA, Spring Web, H2Database, Docker. 
 
-Covered by: Junit, Mockito, Integration Tests
+**Covered by**: Junit, Mockito, Integration Tests
 
-IDE: Intelij
+**IDE**: Intelij
 
-Build automation tool: Maven
+**Build automation tool**: Maven
 
 ### Run the App
 **From the Command Line**
